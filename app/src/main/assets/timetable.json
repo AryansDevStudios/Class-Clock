@@ -1,0 +1,33 @@
+
+[
+  {
+    "subject": "Maths",
+    "startTime": "09:00",
+    "endTime": "09:45"
+  },
+  {
+    "subject": "Science",
+    "startTime": "09:45",
+    "endTime": "10:30"
+  },
+  {
+    "subject": "History",
+    "startTime": "10:30",
+    "endTime": "11:15"
+  },
+  {
+    "subject": "Lunch Break",
+    "startTime": "11:15",
+    "endTime": "12:00"
+  },
+  {
+    "subject": "English",
+    "startTime": "12:00",
+    "endTime": "12:45"
+  },
+  {
+    "subject": "Physical Education",
+    "startTime": "12:45",
+    "endTime": "13:30"
+  }
+]
