@@ -7,6 +7,7 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.graphics.Color
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.Handler
@@ -18,12 +19,17 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import java.util.Locale
+
+data class Period(val subject: String, val startTime: String, val endTime: String)
 
 class OverlayService : Service() {
 
@@ -31,19 +37,28 @@ class OverlayService : Service() {
     private lateinit var overlayView: View
     private lateinit var params: WindowManager.LayoutParams
 
-    // Timetable data (can be moved to a separate data source later)
-    private val timetable = listOf(
-        Period("Maths", "09:00", "09:45"),
-        Period("Science", "09:45", "10:30"),
-        Period("History", "10:30", "11:15")
-        // Add more periods as needed
+    // UI References
+    private lateinit var periodName: TextView
+    private lateinit var timeRemainingValue: TextView
+    private lateinit var timeLabel: TextView
+    private lateinit var overlayText: TextView
+    private lateinit var timeProgress: ProgressBar
+
+    // Data
+    private val timetable: List<Period> = listOf(
+        Period("MATHEMATICS", "09:00", "10:00"),
+        Period("SCIENCE", "10:00", "11:00"),
+        Period("HISTORY", "11:00", "12:00"),
+        Period("LUNCH", "12:00", "12:30"),
+        Period("ENGLISH", "12:30", "13:30")
     )
 
     private val handler = Handler(Looper.getMainLooper())
     private val updateRunnable = object : Runnable {
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun run() {
             updateOverlayText()
-            handler.postDelayed(this, 1000) // Update every second
+            handler.postDelayed(this, 1000)
         }
     }
 
@@ -57,9 +72,11 @@ class OverlayService : Service() {
         if (!::overlayView.isInitialized || !overlayView.isAttachedToWindow) {
             if (Settings.canDrawOverlays(this)) {
                 showOverlay()
-                handler.post(updateRunnable) // Start periodic updates
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    handler.post(updateRunnable)
+                }
             } else {
-                Toast.makeText(this, "Draw over other apps permission is required.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.permission_required), Toast.LENGTH_LONG).show()
                 stopSelf()
             }
         }
@@ -68,7 +85,7 @@ class OverlayService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacks(updateRunnable) // Stop updates
+        handler.removeCallbacks(updateRunnable)
         if (::overlayView.isInitialized && overlayView.isAttachedToWindow) {
             windowManager.removeView(overlayView)
         }
@@ -80,27 +97,23 @@ class OverlayService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                "Class Clock Overlay",
+                getString(R.string.overlay_channel_name),
                 NotificationManager.IMPORTANCE_LOW
             ).apply {
-                description = "Notification to keep the timetable overlay service running."
+                description = getString(R.string.overlay_channel_description)
             }
             getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
         }
 
         val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Class Clock")
-            .setContentText("Timetable overlay is active.")
+            .setContentTitle(getString(R.string.app_name))
+            .setContentText(getString(R.string.overlay_notification_text))
             .setSmallIcon(R.mipmap.ic_launcher)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .build()
 
         if (Build.VERSION.SDK_INT >= 34) {
-            startForeground(
-                NOTIFICATION_ID,
-                notification,
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
-            )
+            startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
         } else {
             startForeground(NOTIFICATION_ID, notification)
         }
@@ -108,8 +121,16 @@ class OverlayService : Service() {
 
     @SuppressLint("InflateParams")
     private fun showOverlay() {
+        // Ensure you are inflating the correct XML layout file name
         overlayView = LayoutInflater.from(this).inflate(R.layout.overlay_view, null)
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
+
+        // Bind Views
+        periodName = overlayView.findViewById(R.id.periodName)
+        timeRemainingValue = overlayView.findViewById(R.id.timeRemainingValue)
+        timeLabel = overlayView.findViewById(R.id.timeLabel)
+        overlayText = overlayView.findViewById(R.id.overlayText)
+        timeProgress = overlayView.findViewById(R.id.timeProgress)
 
         val layoutFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
@@ -125,9 +146,9 @@ class OverlayService : Service() {
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
             PixelFormat.TRANSLUCENT
         ).apply {
-            gravity = Gravity.TOP or Gravity.START
-            x = 0
-            y = 200
+            // Position it top-right or center for the big board
+            gravity = Gravity.CENTER_HORIZONTAL or Gravity.TOP
+            y = 100 // Slight padding from top
         }
 
         setupDragListener()
@@ -161,42 +182,79 @@ class OverlayService : Service() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun updateOverlayText() {
         val currentTime = LocalTime.now()
         val currentPeriod = findCurrentPeriod(currentTime)
-        val textView = overlayView.findViewById<TextView>(R.id.overlayText)
-        val periodName = overlayView.findViewById<TextView>(R.id.periodName)
-        val timeRemaining = overlayView.findViewById<TextView>(R.id.timeRemaining)
-
 
         if (currentPeriod != null) {
+            val startTime = LocalTime.parse(currentPeriod.startTime)
             val endTime = LocalTime.parse(currentPeriod.endTime)
-            val remainingMinutes = ChronoUnit.MINUTES.between(currentTime, endTime)
-            val elapsedMinutes = ChronoUnit.MINUTES.between(LocalTime.parse(currentPeriod.startTime), currentTime)
+
+            val totalSeconds = ChronoUnit.SECONDS.between(startTime, endTime)
+            val remainingSeconds = ChronoUnit.SECONDS.between(currentTime, endTime)
+            val elapsedMinutes = ChronoUnit.MINUTES.between(startTime, currentTime)
 
             periodName.text = currentPeriod.subject
-            timeRemaining.text = "Remaining: ${remainingMinutes}min"
-            textView.text = "Elapsed: ${elapsedMinutes}min"
+            periodName.setTextColor(Color.parseColor("#B0BEC5")) // Reset color
 
-            timeRemaining.setTextColor(if (remainingMinutes < 0) 0xFFFF0000.toInt() else 0xFFFFFFFF.toInt())
-            if(remainingMinutes < 0) {
-                timeRemaining.text = "OVERTIME: ${-remainingMinutes}min"
+            if (remainingSeconds >= 0) {
+                // Formatting time as MM:SS for precision
+                val minutes = remainingSeconds / 60
+                val seconds = remainingSeconds % 60
+                timeRemainingValue.text = String.format(Locale.US, "%02d:%02d", minutes, seconds)
+
+                timeLabel.text = "REMAINING"
+                timeLabel.setTextColor(Color.parseColor("#90FFFFFF"))
+
+                // Color Logic: Green -> Yellow -> Red
+                when {
+                    remainingSeconds < 600 -> timeRemainingValue.setTextColor(Color.parseColor("#FF5252")) // Red < 10m
+                    remainingSeconds < 1200 -> timeRemainingValue.setTextColor(Color.parseColor("#FFD740")) // Yellow < 20m
+                    else -> timeRemainingValue.setTextColor(Color.WHITE)
+                }
+
+                overlayText.text = "$elapsedMinutes min elapsed • Ends ${currentPeriod.endTime}"
+
+                timeProgress.max = totalSeconds.toInt()
+                timeProgress.progress = (totalSeconds - remainingSeconds).toInt()
+
+            } else {
+                // OVERTIME LOGIC
+                val overtimeMinutes = (-remainingSeconds + 59) / 60
+                val overtimeSeconds = -remainingSeconds % 60
+
+                timeRemainingValue.text = String.format(Locale.US, "+%02d:%02d", overtimeMinutes, overtimeSeconds)
+                timeRemainingValue.setTextColor(Color.parseColor("#FF5252")) // Red
+
+                timeLabel.text = "OVERTIME"
+                timeLabel.setTextColor(Color.parseColor("#FF5252"))
+
+                periodName.setTextColor(Color.parseColor("#FF5252")) // Alert effect
+
+                overlayText.text = "Class has ended"
+                timeProgress.progress = timeProgress.max // Full bar
             }
-
         } else {
-            periodName.text = "No period"
-            timeRemaining.text = ""
-            textView.text = currentTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+            // NO CLASS LOGIC
+            periodName.text = "NO CLASS"
+            timeRemainingValue.text = currentTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+            timeRemainingValue.setTextColor(Color.GRAY)
+            timeLabel.text = "CURRENT TIME"
+            overlayText.text = "Free Period"
+            timeProgress.progress = 0
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun findCurrentPeriod(currentTime: LocalTime): Period? {
         return timetable.find {
             val startTime = LocalTime.parse(it.startTime)
             val endTime = LocalTime.parse(it.endTime)
-            !currentTime.isBefore(startTime) && currentTime.isBefore(endTime)
+            // Inclusive start, exclusive end logic
+            (!currentTime.isBefore(startTime) && currentTime.isBefore(endTime)) ||
+                    // Optional: Handle overlapping seconds if strictly needed
+                    (currentTime == startTime)
         }
     }
 }
-
-data class Period(val subject: String, val startTime: String, val endTime: String)

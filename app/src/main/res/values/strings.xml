@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Class Clock</string>
+    <string name="permission_required">Draw over other apps permission is required.</string>
+    <string name="overlay_channel_name">Class Clock Overlay</string>
+    <string name="overlay_channel_description">Notification to keep the timetable overlay service running.</string>
+    <string name="overlay_notification_text">Timetable overlay is active.</string>
+    <string name="session_elapsed">Session Elapsed: %1$dm</string>
+    <string name="overtime">Overtime: %1$dm</string>
+    <string name="no_current_session">NO CURRENT SESSION</string>
+    <string name="empty_time">--</string>
 </resources>
