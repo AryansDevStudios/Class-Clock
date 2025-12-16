@@ -1,6 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#D9121212" /> <!-- 85% opacity Dark Grey -->
-    <corners android:radius="32dp" />
-    <stroke android:width="2dp" android:color="#33FFFFFF" /> <!-- Subtle border -->
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 1. Soft Drop Shadow -->
+    <!-- Offset slightly downwards to create depth -->
+    <item
+        android:left="2dp"
+        android:top="4dp"
+        android:right="2dp"
+        android:bottom="1dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="52dp" />
+            <solid android:color="#40000000" /> <!-- Low opacity black -->
+            <padding
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp"
+                android:top="2dp" />
+        </shape>
+    </item>
+
+    <!-- 2. Main Background Body -->
+    <!-- Uses a subtle dark gradient for a premium matte look -->
+    <item
+        android:bottom="2dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="52dp" />
+            <gradient
+                android:angle="45"
+                android:startColor="#F21A1A1A"
+                android:centerColor="#F2121212"
+                android:endColor="#F2000000"
+                android:type="linear" />
+        </shape>
+    </item>
+
+    <!-- 3. Top Reflection / Gloss (The "Glass" effect) -->
+    <!-- Fades from semi-transparent white to invisible -->
+    <item
+        android:bottom="2dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="52dp" />
+            <gradient
+                android:angle="270"
+                android:endColor="#00FFFFFF"
+                android:startColor="#1AFFFFFF"
+                android:type="linear" />
+        </shape>
+    </item>
+
+    <!-- 4. Subtle Inner Stroke/Border -->
+    <!-- Adds definition to the edges (Rim lighting) -->
+    <item
+        android:bottom="2dp"
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="52dp" />
+            <solid android:color="#00000000" /> <!-- Transparent fill -->
+            <stroke
+                android:width="1dp"
+                android:color="#1FFFFFFF" /> <!-- Very faint white border -->
+        </shape>
+    </item>
+
+</layer-list>

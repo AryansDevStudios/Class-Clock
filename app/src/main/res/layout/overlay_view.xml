@@ -7,86 +7,108 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/overlay_glass_background"
-    android:paddingStart="60dp"
-    android:paddingTop="40dp"
-    android:paddingEnd="60dp"
-    android:paddingBottom="50dp"
-    android:elevation="30dp"
-    android:minWidth="800dp">
+    android:paddingStart="40dp"
+    android:paddingEnd="40dp"
+    android:paddingTop="32dp"
+    android:paddingBottom="36dp"
+    android:elevation="24dp"
+    android:minWidth="820dp">
 
-    <!-- Header: Period / Subject Name -->
+    <!-- Current Time -->
     <TextView
-        android:id="@+id/periodName"
+        android:id="@+id/currentTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:letterSpacing="0.05"
-        android:textColor="#B0BEC5"
-        android:textSize="50sp"
-        android:textAllCaps="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:fontFamily="sans-serif-light"
+        android:textColor="#E6FFFFFF"
+        android:textSize="28sp"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="MATHEMATICS" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="10:30 AM" />
 
-    <!-- Main Countdown Timer -->
+    <!-- Period Name -->
+    <TextView
+        android:id="@+id/periodName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-medium"
+        android:letterSpacing="0.06"
+        android:textColor="#B0BEC5"
+        android:textSize="68sp"
+        android:textAllCaps="true"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/currentTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="SCIENCE" />
+
+    <!-- Remaining Time -->
+    <TextView
+        android:id="@+id/timeRemainingLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:fontFamily="sans-serif-light"
+        android:text="TIME REMAINING"
+        android:textColor="#99FFFFFF"
+        android:textSize="30sp"
+        android:letterSpacing="0.05"
+        app:layout_constraintTop_toBottomOf="@id/periodName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <TextView
         android:id="@+id/timeRemainingValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-black"
-        android:includeFontPadding="false"
-        android:textColor="#FFFFFF"
-        android:textSize="180sp"
-        android:shadowColor="#80000000"
-        android:shadowDx="0"
-        android:shadowDy="10"
-        android:shadowRadius="20"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="#FFFFFFFF"
+        android:textSize="72sp"
+        app:layout_constraintTop_toBottomOf="@id/timeRemainingLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/periodName"
-        tools:text="45:00" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="05:30" />
 
-    <!-- Subtitle: Status / Label -->
+    <!-- Elapsed Time -->
     <TextView
-        android:id="@+id/timeLabel"
+        android:id="@+id/timeElapsedLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-10dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="sans-serif-light"
-        android:text="REMAINING"
-        android:textColor="#90FFFFFF"
-        android:textSize="32sp"
-        android:letterSpacing="0.2"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="TIME ELAPSED"
+        android:textColor="#99FFFFFF"
+        android:textSize="24sp"
+        android:letterSpacing="0.12"
+        app:layout_constraintTop_toBottomOf="@id/timeRemainingValue"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/timeRemainingValue" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Modern Progress Bar -->
+    <TextView
+        android:id="@+id/timeElapsedValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="sans-serif-bold"
+        android:textColor="#F5FFFFFF"
+        android:textSize="58sp"
+        app:layout_constraintTop_toBottomOf="@id/timeElapsedLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="44:30" />
+
+    <!-- Progress Bar -->
     <ProgressBar
         android:id="@+id/timeProgress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
-        android:layout_height="16dp"
-        android:layout_marginTop="40dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="18dp"
         android:progressDrawable="@drawable/custom_progress_bar"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:progress="60"
+        app:layout_constraintTop_toBottomOf="@id/timeElapsedValue"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/timeLabel"
-        app:layout_constraintWidth_percent="0.9" />
-
-    <!-- Footer: Elapsed / Time Info -->
-    <TextView
-        android:id="@+id/overlayText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif"
-        android:textColor="#80FFFFFF"
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/timeProgress"
-        tools:text="10 min elapsed • Ends 10:00" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

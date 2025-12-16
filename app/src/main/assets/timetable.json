@@ -1,33 +1,88 @@
-
-[
-  {
-    "subject": "Maths",
-    "startTime": "09:00",
-    "endTime": "09:45"
-  },
-  {
-    "subject": "Science",
-    "startTime": "09:45",
-    "endTime": "10:30"
-  },
-  {
-    "subject": "History",
-    "startTime": "10:30",
-    "endTime": "11:15"
-  },
-  {
-    "subject": "Lunch Break",
-    "startTime": "11:15",
-    "endTime": "12:00"
-  },
-  {
-    "subject": "English",
-    "startTime": "12:00",
-    "endTime": "12:45"
-  },
-  {
-    "subject": "Physical Education",
-    "startTime": "12:45",
-    "endTime": "13:30"
-  }
-]
+{
+  "timetables": [
+    {
+      "dayOfWeek": "MONDAY",
+      "periods": [
+        { "periodName": "English", "startTime": "08:00", "endTime": "08:45" },
+        { "periodName": "English", "startTime": "08:45", "endTime": "09:30" },
+        { "periodName": "Physical Training", "startTime": "09:30", "endTime": "10:15" },
+        { "periodName": "Physical Training", "startTime": "10:15", "endTime": "11:00" },
+        { "periodName": "Lunch", "startTime": "11:00", "endTime": "11:30" },
+        { "periodName": "Chemistry", "startTime": "11:30", "endTime": "12:15" },
+        { "periodName": "Chemistry", "startTime": "12:15", "endTime": "13:00" },
+        { "periodName": "Mathematics", "startTime": "13:00", "endTime": "13:45" },
+        { "periodName": "Mathematics", "startTime": "13:45", "endTime": "14:30" }
+      ]
+    },
+    {
+      "dayOfWeek": "TUESDAY",
+      "periods": [
+        { "periodName": "Hindi", "startTime": "08:00", "endTime": "08:45" },
+        { "periodName": "Hindi", "startTime": "08:45", "endTime": "09:30" },
+        { "periodName": "Social Science", "startTime": "09:30", "endTime": "10:15" },
+        { "periodName": "Social Science", "startTime": "10:15", "endTime": "11:00" },
+        { "periodName": "Lunch", "startTime": "11:00", "endTime": "11:30" },
+        { "periodName": "Chemistry", "startTime": "11:30", "endTime": "12:15" },
+        { "periodName": "Chemistry", "startTime": "12:15", "endTime": "13:00" },
+        { "periodName": "Mathematics", "startTime": "13:00", "endTime": "13:45" },
+        { "periodName": "Mathematics", "startTime": "13:45", "endTime": "14:30" }
+      ]
+    },
+    {
+      "dayOfWeek": "WEDNESDAY",
+      "periods": [
+        { "periodName": "English", "startTime": "08:00", "endTime": "08:45" },
+        { "periodName": "English", "startTime": "08:45", "endTime": "09:30" },
+        { "periodName": "Social Science", "startTime": "09:30", "endTime": "10:15" },
+        { "periodName": "Social Science", "startTime": "10:15", "endTime": "11:00" },
+        { "periodName": "Lunch", "startTime": "11:00", "endTime": "11:30" },
+        { "periodName": "Biology", "startTime": "11:30", "endTime": "12:15" },
+        { "periodName": "Biology", "startTime": "12:15", "endTime": "13:00" },
+        { "periodName": "Mathematics", "startTime": "13:00", "endTime": "13:45" },
+        { "periodName": "Mathematics", "startTime": "13:45", "endTime": "14:30" }
+      ]
+    },
+    {
+      "dayOfWeek": "THURSDAY",
+      "periods": [
+        { "periodName": "Hindi", "startTime": "08:00", "endTime": "08:45" },
+        { "periodName": "Hindi", "startTime": "08:45", "endTime": "09:30" },
+        { "periodName": "Social Science", "startTime": "09:30", "endTime": "10:15" },
+        { "periodName": "Social Science", "startTime": "10:15", "endTime": "11:00" },
+        { "periodName": "Lunch", "startTime": "11:00", "endTime": "11:30" },
+        { "periodName": "Biology", "startTime": "11:30", "endTime": "12:15" },
+        { "periodName": "Biology", "startTime": "12:15", "endTime": "13:00" },
+        { "periodName": "Mathematics", "startTime": "13:00", "endTime": "13:45" },
+        { "periodName": "Mathematics", "startTime": "13:45", "endTime": "14:30" }
+      ]
+    },
+    {
+      "dayOfWeek": "FRIDAY",
+      "periods": [
+        { "periodName": "English", "startTime": "08:00", "endTime": "08:45" },
+        { "periodName": "English", "startTime": "08:45", "endTime": "09:30" },
+        { "periodName": "Social Science", "startTime": "09:30", "endTime": "10:15" },
+        { "periodName": "Social Science", "startTime": "10:15", "endTime": "11:00" },
+        { "periodName": "Lunch", "startTime": "11:00", "endTime": "11:30" },
+        { "periodName": "Physics", "startTime": "11:30", "endTime": "12:15" },
+        { "periodName": "Physics", "startTime": "12:15", "endTime": "13:00" },
+        { "periodName": "Information Technology", "startTime": "13:00", "endTime": "13:45" },
+        { "periodName": "Information Technology", "startTime": "13:45", "endTime": "14:30" }
+      ]
+    },
+    {
+      "dayOfWeek": "SATURDAY",
+      "periods": [
+        { "periodName": "Hindi", "startTime": "08:00", "endTime": "08:45" },
+        { "periodName": "Hindi", "startTime": "08:45", "endTime": "09:30" },
+        { "periodName": "Social Science", "startTime": "09:30", "endTime": "10:15" },
+        { "periodName": "Social Science", "startTime": "10:15", "endTime": "11:00" },
+        { "periodName": "Lunch", "startTime": "11:00", "endTime": "11:30" },
+        { "periodName": "Physics", "startTime": "11:30", "endTime": "12:15" },
+        { "periodName": "Physics", "startTime": "12:15", "endTime": "13:00" },
+        { "periodName": "Mathematics", "startTime": "13:00", "endTime": "13:45" },
+        { "periodName": "Mathematics", "startTime": "13:45", "endTime": "14:30" }
+      ]
+    }
+  ]
+}
